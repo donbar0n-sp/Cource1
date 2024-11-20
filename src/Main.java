@@ -12,8 +12,6 @@ public class Main {
         employees[5] = new Employee("Иванов Степан Сергеевич", 100000, 5);
         employees[6] = new Employee("Степанов Сергей Федорович", 70000, 3);
         employees[7] = new Employee("Сергеев Федор Максимович", 85000, 4);
-        employees[8] = new Employee("Федоров Максим Иванович", 60000, 1);
-        employees[9] = new Employee("Максимов Иван Степанович", 80000, 4);
     }
 
     public static void main(String[] args) {
@@ -28,48 +26,79 @@ public class Main {
 
     public void printEmployee() {
         for (Employee employee : employees) {
-            System.out.println(employee);
+            if (employee != null) { // Check for non-null employee
+                System.out.println(employee);
+            }
         }
     }
+
 
     public int calculateSalariesSum() {
         int sumSalaries = 0;
         for (Employee employee : employees) {
-            sumSalaries = sumSalaries + employee.getSalary();
+            if (employee != null) {
+                sumSalaries += employee.getSalary();
+            }
         }
         return sumSalaries;
     }
 
+
     public Employee getMinSalaryEmployee() {
-        Employee minSalaryEmployee = employees[0];
+        Employee minSalaryEmployee = null;
         for (Employee employee : employees) {
-            if (employee.getSalary() < minSalaryEmployee.getSalary()) {
-                minSalaryEmployee = employee;
+            if (employee != null) {
+                if (minSalaryEmployee == null || employee.getSalary() < minSalaryEmployee.getSalary()) {
+                    minSalaryEmployee = employee;
+                }
             }
+        }
+        if (minSalaryEmployee == null) {
+            throw new IllegalArgumentException("No valid employees to determine the minimum salary.");
         }
         return minSalaryEmployee;
     }
 
+
     public Employee getMaxSalaryEmployee() {
         Employee maxSalaryEmployee = employees[0];
         for (Employee employee : employees) {
-            if (employee.getSalary() > maxSalaryEmployee.getSalary()) {
+            if (employee != null) {
+                if (maxSalaryEmployee == null || employee.getSalary() > maxSalaryEmployee.getSalary()) {
                 maxSalaryEmployee = employee;
+                }
             }
+        }
+        if (maxSalaryEmployee == null) {
+            throw new IllegalArgumentException("No valid employees to determine the maximum salary.");
         }
         return maxSalaryEmployee;
     }
 
+
     public int calculateAverageSalary() {
-        int averageSalary = calculateSalariesSum() / employees.length;
-        return averageSalary;
+        int validEmployeeCount = 0;
+        int sumSalaries = calculateSalariesSum();
+
+        for (Employee employee : employees) {
+            if (employee != null) {
+                validEmployeeCount++;
+            }
+        }
+        if (validEmployeeCount == 0) {
+            throw new IllegalArgumentException("No valid employees to calculate average salary.");
+        }
+        return sumSalaries / validEmployeeCount;
     }
+
 
     public void printEmployeesNames() {
         int idCount = 0;
         for (Employee employee : employees) {
-            System.out.printf("%d. %s%n", idCount, employee.getName());
-            idCount++;
+            if (employee != null) {
+                System.out.printf("%d. %s%n", idCount, employee.getName());
+                idCount++;
+            }
         }
     }
 }
